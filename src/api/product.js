@@ -2,16 +2,16 @@ import request from '@/utils/request'
 
 export function getList(params) {
   return request({
-    url: '/code/code',
+    url: '/product',
     method: 'get',
     params
   })
 }
 
-export function delivery(data) {
+export function post(data) {
   return request({
-    url: '/code/delivery',
-    method: 'put',
+    url: '/product',
+    method: 'post',
     data
   })
 }

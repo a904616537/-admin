@@ -7,6 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 
 import '@/styles/index.scss' // global css
+import moment from 'moment';
 
 import App from './App'
 import store from './store'
@@ -26,6 +27,11 @@ import '@/permission' // permission control
 import { mockXHR } from '../mock'
 if (process.env.NODE_ENV === 'production') {
   mockXHR()
+}
+
+
+String.prototype.format = function() {
+	return moment(this).format('YYYY-MM-DD H:mm')
 }
 
 // set ElementUI lang to EN

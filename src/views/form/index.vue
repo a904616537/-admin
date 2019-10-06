@@ -6,15 +6,21 @@
       </el-form-item>
       <el-form-item label="上传图片">
         <el-upload
-          action="https://jsonplaceholder.typicode.com/posts/"
-          list-type="picture-card"
-          :on-preview="handlePictureCardPreview"
-          :on-remove="handleRemove">
-          <i class="el-icon-plus"></i>
-        </el-upload>
+        action="http://server.h-fish.vip/upload"
+        list-type="picture-card"
+        :limit = "1"
+        :multiple = "false"
+        :on-preview="handlePictureCardPreview"
+        :on-remove="handleRemove"
+        :on-success="handleSuccess">
+        <i class="el-icon-plus"></i>
+      </el-upload>
         <el-dialog :visible.sync="dialogVisible">
           <img width="100%" :src="dialogImageUrl" alt="">
         </el-dialog>
+      </el-form-item>
+      <el-form-item label="价格">
+        <el-input-number v-model="form.price" :precision="2" :step="0.1"></el-input-number>
       </el-form-item>
       <el-form-item label="内容描述">
         <el-input v-model="form.desc" type="textarea" />
@@ -28,32 +34,43 @@
 </template>
 
 <script>
+import { getList, post } from '@/api/product'
 export default {
   data() {
     return {
       dialogImageUrl: '',
       dialogVisible: false,
       form: {
-        name: '',
-        region: '',
-        date1: '',
-        date2: '',
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: ''
+        name  : '',
+        price : '',
+        img   : '',
+        desc  : ''
       }
     }
   },
   methods: {
     onSubmit() {
-      this.$message('submit!')
+      post(this.form)
+      .then(doc => {
+        this.$message.success('上传成功！')
+      })
+      .catch(err => {
+        this.$message.error('上传失败！')
+      })
+      
     },
     onCancel() {
       this.$message({
         message: 'cancel!',
         type: 'warning'
       })
+    },
+    handleSuccess(response,file,fileList) {
+      this.form.img = file.response.msg;
+      this.$message({
+          message: '图片上传成功！',
+          type: 'success'
+      });
     },
     handleRemove(file, fileList) {
       console.log(file, fileList);
